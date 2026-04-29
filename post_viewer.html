@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your LinkedIn Posts — Bane Consulting</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --border: rgba(255,255,255,0.07);
+    --accent: #0066ff;
+    --accent2: #00c2ff;
+    --text: #f0f0f5;
+    --text-muted: #7a7a8c;
+    --success: #00e5a0;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,102,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,102,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,102,255,0.07) 0%, transparent 70%);
+    top: -150px; right: -100px;
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800; font-size: 16px; color: white;
+  }
+
+  .header-text h1 {
+    font-family: var(--font-display);
+    font-size: 17px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .header-text p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .badge {
+    margin-left: auto;
+    font-size: 10px; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+    background: rgba(0,102,255,0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(0,194,255,0.2);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  .ready-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+  }
+
+  .ready-bar span {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700;
+  }
+
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .post-card:hover { border-color: rgba(255,255,255,0.12); }
+
+  .version-tag {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(0,194,255,0.08);
+    border: 1px solid rgba(0,194,255,0.15);
+    border-radius: 6px; padding: 3px 8px;
+    display: inline-block; margin-bottom: 20px;
+  }
+
+  .post-body {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .post-body strong { color: #fff; font-weight: 600; }
+  .post-body em { font-style: italic; color: #c0c0d0; }
+
+  .post-actions {
+    display: flex; gap: 8px;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn:hover { border-color: rgba(255,255,255,0.15); color: var(--text); background: rgba(255,255,255,0.04); }
+  .btn.copied { color: var(--success); border-color: rgba(0,229,160,0.3); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; color: white; font-weight: 600;
+  }
+  .btn.primary:hover { opacity: 0.9; }
+
+  .empty {
+    text-align: center; padding: 80px 20px;
+    color: var(--text-muted); font-size: 14px; line-height: 1.8;
+  }
+
+  .empty h2 {
+    font-family: var(--font-display);
+    font-size: 20px; color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .char-count {
+    font-size: 11px; color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+
+  <header>
+    <div class="logo">B</div>
+    <div class="header-text">
+      <h1>LinkedIn Post Generator</h1>
+      <p>Bane Consulting Services Inc.</p>
+    </div>
+    <span class="badge">Microsoft Partners</span>
+  </header>
+
+  <div id="content"></div>
+
+  <div class="footer">Generated by Bane Consulting Services · Microsoft Partner LinkedIn Post Generator</div>
+
+</div>
+
+<script>
+  function getParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      v1: p.get('v1') || '',
+      v2: p.get('v2') || '',
+      industry: p.get('industry') || '',
+      region: p.get('region') || ''
+    };
+  }
+
+  function renderMd(t) {
+    return t
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+  }
+
+  function copyText(id, btn) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function buildCard(text, label, id) {
+    const charCount = text.replace(/<[^>]+>/g,'').length;
+    return `
+      <div class="post-card">
+        <span class="version-tag">${label}</span>
+        <div class="post-body" id="${id}">${renderMd(text)}</div>
+        <div class="post-actions">
+          <button class="btn" onclick="copyText('${id}', this)">Copy</button>
+          <span class="char-count">${charCount} characters</span>
+        </div>
+      </div>`;
+  }
+
+  function init() {
+    const { v1, v2, industry, region } = getParams();
+    const el = document.getElementById('content');
+
+    if (!v1 && !v2) {
+      el.innerHTML = `
+        <div class="empty">
+          <h2>No posts to display</h2>
+          <p>This page is opened automatically by the LinkedIn Post Generator agent.<br>Go back to the agent and generate your posts first.</p>
+        </div>`;
+      return;
+    }
+
+    const meta = (industry || region) ? `<p style="font-size:13px;color:var(--text-muted);margin-bottom:24px">Generated for <strong style="color:var(--text)">${industry}</strong>${region ? ' · ' + region : ''}</p>` : '';
+
+    let html = `<div class="ready-bar"><div class="dot"></div><span>Your posts are ready</span></div>${meta}`;
+    if (v1) html += buildCard(v1, 'Version 1 — Story / Scenario Hook', 'post1');
+    if (v2) html += buildCard(v2, 'Version 2 — Stat / Bold Statement Hook', 'post2');
+
+    el.innerHTML = html;
+  }
+
+  init();
+</script>
+</body>
+</html>
